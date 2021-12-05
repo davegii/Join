@@ -1,24 +1,34 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 
 
 public class Join {
 
-    public static void main(String[] args) throws FileNotFoundException {
-        
-        //parsing a CSV file into Scanner class constructor  
-        Scanner sc = new Scanner(new File("C:\\Users\\Kedde\\Downloads\\nation.csv"));
-        sc.useDelimiter(",");   //sets the delimiter pattern  
-        while (sc.hasNext())  //returns a boolean value  
-        {  
-        System.out.print(sc.next()+ " ");  //find and returns the next complete token from this scanner
-        }   
-        sc.close();  //closes the scanner  
+    public static void main(String[] args) throws IOException {
+        String input1 = args[0];
+        //String col1 = args[1];
+        //String input2 = args[2];
+        //String col2 = args[3];
+        //String procedure = args[4];
+        //String output = args[5];
+        String thisLine;
+        FileInputStream fis = new FileInputStream(input1);
+        DataInputStream myInput = new DataInputStream(fis);
+        List<String[]> lines = new ArrayList<String[]>();
+        while ((thisLine = myInput.readLine()) != null) {
+            lines.add(thisLine.split(","));
+        }
 
-
-        //if the argument equals nested loop TODO: make sure it is args[4]
+        // convert our list to a String array.
+        String[][] array = new String[lines.size()][0];
+        lines.toArray(array);
+        for (int i =0; i < array.length; i++){
+            System.out.println(array[i][0]);
+        }
 
     }
 
