@@ -2,11 +2,9 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Scanner;
-
-
 
 public class Join {
+    private static double INTEGER_RANGE = 1L << 32;
 
     public static void main(String[] args) throws IOException {
         long startTime = System.nanoTime();
@@ -16,14 +14,22 @@ public class Join {
         String col2 = args[3];
         String procedure = args[4];
         String output = args[5];
+        String splitBy = ",";
         String thisLine;
         //INPUT 1
         FileInputStream fis = new FileInputStream(input1);
         DataInputStream myInput = new DataInputStream(fis);
         List<String[]> lines = new ArrayList<String[]>();
+        thisLine = myInput.readLine();
+        lines.add(thisLine.split(splitBy));
+        //System.out.println("1");
         while ((thisLine = myInput.readLine()) != null) {
-            lines.add(thisLine.split(","));
+            double doubleHash = ((long) thisLine.hashCode() - Integer.MIN_VALUE) / INTEGER_RANGE;
+            if(doubleHash < 0.001)
+                lines.add(thisLine.split(splitBy));
+
         }
+        //System.out.println("2");
 
         // convert our list to a String array.
         String[][] array1 = new String[lines.size()][0];
@@ -37,9 +43,16 @@ public class Join {
         FileInputStream fis2 = new FileInputStream(input2);
         DataInputStream myInput2 = new DataInputStream(fis2);
         List<String[]> lines2 = new ArrayList<String[]>();
+        thisLine = myInput2.readLine();
+        lines2.add(thisLine.split(splitBy));
+        //System.out.println("1");
         while ((thisLine = myInput2.readLine()) != null) {
-            lines2.add(thisLine.split(","));
+            double doubleHash = ((long) thisLine.hashCode() - Integer.MIN_VALUE) / INTEGER_RANGE;
+            if(doubleHash < 0.001)
+                lines2.add(thisLine.split(splitBy));
+
         }
+        //System.out.println("2");
 
         // convert our list to a String array.
         String[][] array2 = new String[lines2.size()][0];
@@ -75,7 +88,7 @@ public class Join {
         }
         //System.out.println("Index1: "+ index1);
         //System.out.println("Index2: "+ index2);
-        //if the argument equals nested loop TODO: make sure it is args[4]
+        //if the argument equals nested loop
         ArrayList<String[]> matches = new ArrayList<>();
         if(procedure.toLowerCase().equals("nested_loop")){
             System.out.println();
@@ -94,7 +107,6 @@ public class Join {
                 hash.put(array1[row1][index1], array1[row1]);
             }
             //for (String[] a : array1) {
-            //    //TODO: make sure a[0] is correct for the join column
             //    hash.put(a[0], a);
             //}
 
