@@ -14,7 +14,7 @@ public class Join {
         String input2 = args[2];
         String col2 = args[3];
         String procedure = args[4];
-        //String output = args[5];
+        String output = args[5];
         String thisLine;
         //INPUT 1
         FileInputStream fis = new FileInputStream(input1);
@@ -28,9 +28,9 @@ public class Join {
         String[][] array1 = new String[lines.size()][0];
         lines.toArray(array1);
         //TEST
-        for (int i =0; i < array1.length; i++){
-            System.out.println(array1[i][0]);
-        }
+        //for (int i =0; i < array1.length; i++){
+        //    System.out.println(array1[i][0]);
+        //}
 
         //INPUT 2
         FileInputStream fis2 = new FileInputStream(input2);
@@ -45,9 +45,9 @@ public class Join {
         lines2.toArray(array2);
 
         //TEST
-        for (int i =0; i < array2.length; i++){
-            System.out.println(array2[i][0]);
-        }
+        //for (int i =0; i < array2.length; i++){
+        //    System.out.println(array2[i][0]);
+        //}
         //Find the indexes
         int index1 =-1;
         for(int i = 0; i < array1.length; i++){
@@ -72,8 +72,8 @@ public class Join {
             System.out.println("No match found");
             return;
         }
-        System.out.println("Index1: "+ index1);
-        System.out.println("Index2: "+ index2);
+        //System.out.println("Index1: "+ index1);
+        //System.out.println("Index2: "+ index2);
         //if the argument equals nested loop TODO: make sure it is args[4]
         if(procedure.toLowerCase().equals("nested_loop")){
             System.out.println();
@@ -88,10 +88,23 @@ public class Join {
             }
             matches.toArray();
             //matches.toArray(new String[matches.size()][]);
-            System.out.println("Start");
-            for(int row = 0; row<matches.size(); row++){
-                for(int col =0; col <matches.get(row).length; col++)
-                System.out.println(matches.get(row)[col]);
+            //System.out.println("Start");
+            try (PrintWriter writer = new PrintWriter(output)) {
+
+                StringBuilder sb = new StringBuilder();
+                for(int row = 0; row<matches.size(); row++){
+                    for(int col =0; col <matches.get(row).length; col++) {
+                        sb.append(matches.get(row)[col]);
+                        sb.append(',');
+                    }
+                    sb.append('\n');
+                }
+
+                writer.write(sb.toString());
+                System.out.println("done!");
+
+            } catch (FileNotFoundException e) {
+                System.out.println(e.getMessage());
             }
         } else if(args[4].toLowerCase().equals("hash")){
             HashMap<String, String[]> hash = new HashMap<String, String[]>();
