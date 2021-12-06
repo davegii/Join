@@ -51,7 +51,7 @@ public class Join {
         //}
         //Find the indexes
         int index1 =-1;
-        for(int i = 0; i < array1.length; i++){
+        for(int i = 0; i < array1[0].length; i++){
             if(array1[0][i].equals(col1)){
                 index1 = i;
                 break;
@@ -63,7 +63,7 @@ public class Join {
         }
 
         int index2 =-1;
-        for(int i = 0; i < array2.length; i++){
+        for(int i = 0; i < array2[0].length; i++){
             if(array2[0][i].equals(col2)){
                 index2 = i;
                 break;
@@ -132,7 +132,7 @@ public class Join {
         }
         long endTime = System.nanoTime();
         long duration = (endTime - startTime);
-        System.out.println("That took: "+duration/1000000000.+" seconds");
+        System.out.println("That took: "+duration/1000.+" microseconds");
     }
     private static String[] combine(String[] one, String[] two, int index1, int index2) {
         String[] r = new String[one.length + two.length - 1];
