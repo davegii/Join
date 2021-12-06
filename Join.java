@@ -9,6 +9,7 @@ import java.util.Scanner;
 public class Join {
 
     public static void main(String[] args) throws IOException {
+        long startTime = System.nanoTime();
         String input1 = args[0];
         String col1 = args[1];
         String input2 = args[2];
@@ -75,9 +76,9 @@ public class Join {
         //System.out.println("Index1: "+ index1);
         //System.out.println("Index2: "+ index2);
         //if the argument equals nested loop TODO: make sure it is args[4]
+        ArrayList<String[]> matches = new ArrayList<>();
         if(procedure.toLowerCase().equals("nested_loop")){
             System.out.println();
-            ArrayList<String[]> matches = new ArrayList<>();
             //start at 1 because we want to ignore first row of header
             for (int row1 = 1; row1 < array1.length; row1++) {
                 for (int row2 = 1; row2 < array2.length; row2++) {
@@ -86,41 +87,52 @@ public class Join {
                     }
                 }
             }
-            matches.toArray();
-            //matches.toArray(new String[matches.size()][]);
-            //System.out.println("Start");
-            try (PrintWriter writer = new PrintWriter(output)) {
 
-                StringBuilder sb = new StringBuilder();
-                for(int row = 0; row<matches.size(); row++){
-                    for(int col =0; col <matches.get(row).length; col++) {
-                        sb.append(matches.get(row)[col]);
-                        sb.append(',');
-                    }
-                    sb.append('\n');
-                }
-
-                writer.write(sb.toString());
-                System.out.println("done!");
-
-            } catch (FileNotFoundException e) {
-                System.out.println(e.getMessage());
-            }
         } else if(args[4].toLowerCase().equals("hash")){
             HashMap<String, String[]> hash = new HashMap<String, String[]>();
-            for (String[] a : array1) {
-                //TODO: make sure a[0] is correct for the join column
-                hash.put(a[0], a);
+            for (int row1 = 1; row1 < array1.length; row1++) {
+                hash.put(array1[row1][index1], array1[row1]);
             }
+            //for (String[] a : array1) {
+            //    //TODO: make sure a[0] is correct for the join column
+            //    hash.put(a[0], a);
+            //}
 
-            ArrayList joined = new ArrayList();
-
-            for(String[] b : array2){
+            //ArrayList joined = new ArrayList();
+            for (int row2 = 1; row2 < array2.length; row2++) {
+                if (hash.containsKey(array2[row2][index2])) {
+                    matches.add(combine(hash.get(array2[row2][index2]), array2[row2], index1, index2));
+                }
+            }
+            //for(String[] b : array2){
                 //if(b.equals())
                     //String a = hash.get(b[0]);
                 //joined.add(new String[]{a, b});
-            }
+            //}
         }
+        matches.toArray();
+        //matches.toArray(new String[matches.size()][]);
+        //System.out.println("Start");
+        try (PrintWriter writer = new PrintWriter(output)) {
+
+            StringBuilder sb = new StringBuilder();
+            for(int row = 0; row<matches.size(); row++){
+                for(int col =0; col <matches.get(row).length; col++) {
+                    sb.append(matches.get(row)[col]);
+                    sb.append(',');
+                }
+                sb.append('\n');
+            }
+
+            writer.write(sb.toString());
+            System.out.println("done!");
+
+        } catch (FileNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime);
+        System.out.println("That took: "+duration/1000000000.+" seconds");
     }
     private static String[] combine(String[] one, String[] two, int index1, int index2) {
         String[] r = new String[one.length + two.length - 1];
